@@ -73,6 +73,11 @@
     return app_uuid;
 }
 
+static id ObjectOrNull(id object)
+{
+  return object ?: [NSNull null];
+}
+
 - (void)getDeviceInfo:(CDVInvokedUrlCommand*)command
 {
     NSDictionary* deviceProperties = [self deviceProperties];
@@ -87,12 +92,12 @@
 
     return @{
              @"manufacturer": @"Apple",
-             @"model": [device modelVersion],
+             @"model": ObjectOrNull([device modelVersion]),
              @"platform": @"iOS",
-             @"version": [device systemVersion],
-             @"uuid": [self uniqueAppInstanceIdentifier:device],
-             @"cordova": [[self class] cordovaVersion],
-             @"isVirtual": @([self isVirtual])
+             @"version": ObjectOrNull([device systemVersion]),
+             @"uuid": ObjectOrNull([self uniqueAppInstanceIdentifier:device]),
+             @"cordova": ObjectOrNull([[self class] cordovaVersion]),
+             @"isVirtual": ObjectOrNull(@([self isVirtual]))
              };
 }
 
